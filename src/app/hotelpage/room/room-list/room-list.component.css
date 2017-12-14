@@ -1,0 +1,24 @@
+.hotel-card{
+    margin-bottom: 5px;
+}
+
+.room-image {
+    display:block;
+    max-height: 250px;
+    max-width: 90%;
+    margin-bottom:5px;
+}
+
+.selector{
+    margin-left: 10px;
+    margin-right:10px;
+}
+
+.form-control {
+    margin-left:10px;
+    margin-right: 10px;
+}
+
+.btn{
+    margin-right: 10px;
+}

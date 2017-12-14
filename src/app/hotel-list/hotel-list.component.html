@@ -1,0 +1,35 @@
+<div class="form-group">
+  <label for="exampleSelect1">Country</label>
+  <select class="form-control" [(ngModel)]="filterCountry" id="exampleSelect1">
+    <option>USA</option>
+    <option>FR</option>
+  </select>
+</div>
+<div class="form-group">
+  <label for="exampleSelect1">State</label>
+  <select class="form-control" [(ngModel)]='filterState' id="exampleSelect1">
+    <option>CA</option>
+    <option>DC</option>
+    <option>FL</option>
+    <option>HI</option>
+    <option>NJ</option>
+    <option>NY</option>
+  </select>
+</div>
+<button (click)="setFilter()" class="btn btn-submit">Submit</button>
+<button (click) = "resetHotelFilter()" class="btn btn-info">Reset Filters</button>
+<hr>
+<div class="card hotel-card" *ngFor="let hotel of hotels" (click)="onInfoClick(hotel.hotel_id)">
+  <div class="card-block" >
+    <h3 class="card-title">{{hotel.hotel_id}}</h3>
+    <h6 class="card-subtitle mb-2 text-muted">{{hotel.street}}
+        | {{hotel.city}}
+        | {{hotel.state}}</h6>
+    <p class="card-text">Phone Number: {{hotel.phone_no}}</p>
+    <button type="button" (click) = "onInfoClick(hotel.hotel_id)" routerLink = "/hotelpage" class="btn btn-info">Available Room Info</button>
+    <app-reviewlist></app-reviewlist>
+  </div>
+</div>   
+
+
+ 

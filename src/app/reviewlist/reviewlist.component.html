@@ -1,0 +1,44 @@
+<button type="button" (click) = "toggleReviews()" class= "btn btn-primary">Reviews</button>
+<hr>
+<div class="review-div" *ngIf = "reviews">
+  <ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Room Reviews</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">Service Reviews</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false">Breakfast Reviews</a>
+    </li>
+  </ul>
+  <div class="tab-content" id="myTabContent">
+    <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+      <div class="card" *ngFor = "let roomReview of roomReviews">
+        <div class="card-block">
+          <h4 class="card-title">{{roomReview.hotel_id}} | Room_no:{{roomReview.room_no}} | Rating: {{roomReview.rating}} </h4>
+          <h6 class="card-subtitle mb-2 text-muted">User: {{roomReview.cid}}</h6>
+          <p class="card-text">{{roomReview.text_comment}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+      <div class="card" *ngFor = "let serviceReview of serviceReviews">
+        <div class="card-block">
+          <h4 class="card-title">{{serviceReview.hotel_id}} | {{serviceReview.s_type}} | Rating: {{serviceReview.rating}}  </h4>
+          <h6 class="card-subtitle mb-2 text-muted">User: {{serviceReview.cid}}</h6>
+          <p class="card-text">{{serviceReview.text_comment}}</p>
+        </div>
+      </div>
+    </div>
+    <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+      <div class="card" *ngFor = "let breakfastReview of breakfastReviews">
+        <div class="card-block">
+          <h4 class="card-title">{{breakfastReview.hotel_id}} | {{breakfastReview.b_type}} | Rating: {{breakfastReview.rating}} </h4>
+          <h6 class="card-subtitle mb-2 text-muted">User: {{breakfastReview.cid}}</h6>
+          <p class="card-text">{{breakfastReview.text_comment}}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

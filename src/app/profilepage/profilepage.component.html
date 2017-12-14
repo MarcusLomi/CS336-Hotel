@@ -1,0 +1,134 @@
+<div class="container profile-container">
+  <div class="row my-2">
+      <div class="col-lg-8 order-lg-2">
+          <ul class="nav nav-tabs">
+              <li class="nav-item">
+                  <a href="" data-target="#profile" data-toggle="tab" class="nav-link active">Profile</a>
+              </li>
+              <li class="nav-item">
+                  <a href="" data-target="#messages" data-toggle="tab" class="nav-link">Reservations</a>
+              </li>
+              <li class="nav-item">
+                    <a href="" data-target="#adminstats" *ngIf="this.customerService.getCurrentCustomer().cid=='admin'" data-toggle="tab" class="nav-link">Admin Statistics</a>
+              </li>
+          </ul>
+          <div class="tab-content py-4">
+              <div class="tab-pane active" id="profile">
+                  <h5 class="mb-3">{{customer.cid}}</h5>
+                  <h5 class="mb-3">{{customer.customer_name}}</h5>
+                  <div class="row">
+                      <div class="col-md-6">
+                          <h6>Address</h6>
+                          <p>
+                              {{customer.address}}
+                          </p>
+                          <h6>email</h6>
+                          <p>
+                              {{customer.email}}
+                          </p>
+                      </div>
+                     
+                      <div class="col-md-12">
+                          <h5 class="mt-2"><span class="fa fa-clock-o ion-clock float-right"></span>Card Information</h5><button (click)="toggleCardInfo()" class ="btn btn-primary">Show</button>
+                          <table class="table table-sm table-hover table-striped" *ngIf="cardToggle">
+                              <tbody>                                    
+                                  <tr *ngFor = "let card of cards">
+                                      <td>
+                                          <strong>{{card.card_type}}</strong> {{card.Cnumber}} <strong>{{card.exp_date}} | {{card.cardholder_name}} |</strong>
+                                          <strong>{{card.billing_Addr}}</strong>
+                                      </td>
+                                  </tr>
+                                  <button class = "btn btn-primary" (click)='addCardToggle()' type = "button">Add More Cards</button>
+                                  <app-addcard *ngIf = "addCard"></app-addcard>
+                              </tbody>
+                          </table>
+                      </div>
+                  </div>
+                  <!--/row-->
+              </div>
+              <div class="tab-pane" id="adminstats">
+                    <div class="alert alert-warning" (click)="testMethod()"><strong>Date Range Start: </strong><input type="date" [(ngModel)] = "inDate"> <strong>Date Range End: </strong> <input type="date" [(ngModel)] = "outDate" ></div>
+                    <h3 class="stat1">Top 5 spenders: 
+                          </h3>
+                    <h3 class="stat2">Statistic 2
+                          </h3>
+                    <h3 class="stat3">Statistic 3
+                          </h3>
+                    <h3 class="stat4">Statistic 4
+                          </h3>
+              </div>
+              <div class="tab-pane" id="messages">
+                  <div *ngFor = "let reservation of reservations">
+                    <div class="card card-primary mb-3 reservationCard" *ngIf ="reservation.cid==this.customer.cid">
+                            <div class="card-block">
+                                <div>
+                                    <h3>Invoice No. {{reservation.invoice_No}} | ${{reservation.Total_Amt}}</h3>
+                                    <div *ngFor = "let roomRes of roomReservations">
+                                        <h4 *ngIf="roomRes.invoice_No==reservation.invoice_No">
+                                            {{roomRes.hotel_id}} | Room: {{roomRes.room_no}} 
+                                        </h4>
+                                        <div *ngIf="roomRes.invoice_No==reservation.invoice_No">
+                                                From <strong>{{roomRes.in_Date}}</strong> to <strong>{{roomRes.out_Date}}</strong> | {{roomRes.no_Of_Days}} Day(s)
+                                                <button (click) = "toggleRoomReview(reservation.invoice_No)" >Review Room</button>
+                                                <div class="form-group" *ngIf ="roomReview && reservation.invoice_No == selectedInvoice">
+                                                        <label for="exampleFormControlTextarea1">Make Room Review: </label><input type="number" [(ngModel)]="roomRating" placeholder="Rating" min="1" max="10">
+                                                        <textarea class="form-control" [(ngModel)]="roomReviewText" id="exampleFormControlTextarea1" rows="3" maxlength="200"> </textarea>
+                                                        <button [disabled]="roomReviewText=='' || roomRating == null " (click)="submitRoomReview(roomRes.hotel_id,roomRes.room_no)" class="btn btn-info">Submit</button>
+                                                        <div class="alert alert-danger" *ngIf="invalidRating" role="alert">
+                                                                <strong>Invalid Rating!</strong> Pick a number between 1 and 10;
+                                                        </div>
+                                                        <div class="alert alert-success" *ngIf="finishedRR" role="alert">
+                                                                <strong>Done!</strong> ReviewAdded
+                                                        </div>
+                                                </div>
+                                        </div>
+                                        
+                                    </div>
+
+                                    <!-- to cycleThrough included breakfasts -->
+                                    <div *ngFor = "let ib of includedBreakfast">
+                                        <div *ngIf = "ib.invoice_No == reservation.invoice_No">
+                                            Included Breakfast: {{ib.b_type}}
+                                            <button (click) = "toggleBreakfastReview(reservation.invoice_No)" >Review Breakfast</button>
+                                            <div class="form-group" *ngIf ="breakfastReview && reservation.invoice_No == selectedInvoice">
+                                                    <label for="exampleFormControlTextarea1" >Make Breakfast Review: </label><input type="number" [(ngModel)]="breakfastRating" placeholder="Rating" min="1" max="10">
+                                                    <textarea class="form-control" id="exampleFormControlTextarea1" [(ngModel)]="breakfastReviewText" rows="3" maxlength="200"> </textarea>
+                                                    <button [disabled]="breakfastReviewText=='' || breakfastRating == null" (click)="submitBreakfastReview(ib.hotel_id, ib.b_type)" class="btn btn-info">Submit</button>
+                                                    <div class="alert alert-danger" *ngIf="invalidRating" role="alert">
+                                                            <strong>Invalid Rating!</strong> Pick a number between 1 and 10;
+                                                    </div>
+                                                    <div class="alert alert-success" *ngIf="finishedBR" role="alert">
+                                                            <strong>Done!</strong> ReviewAdded
+                                                    </div>
+                                                </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- to cycle through includedServices -->
+                                    <div *ngFor = "let is of includedService">
+                                        <div *ngIf = "is.invoice_No == reservation.invoice_No">
+                                            Included Service: {{is.s_type}}
+                                            <button (click) = "toggleServiceReview(reservation.invoice_No)">Review Hotel</button>
+                                            <div class="form-group" *ngIf ="serviceReview && reservation.invoice_No == selectedInvoice">
+                                                <label for="exampleFormControlTextarea1">Make Service Review: </label><input type="number" [(ngModel)]="serviceRating" placeholder="Rating" min="1" max="10">
+                                                <textarea class="form-control" [(ngModel)]="serviceReviewText" id="exampleFormControlTextarea1" rows="3" maxlength="200"> </textarea>
+                                                <button [disabled]="serviceReviewText=='' || serviceRating == null" (click)="submitServiceReview(is.hotel_id,is.s_type)" class="btn btn-info">Submit</button>
+                                                <div class="alert alert-danger" *ngIf="invalidRating" role="alert">
+                                                        <strong>Invalid Rating!</strong> Pick a number between 1 and 10;
+                                                </div>
+                                                <div class="alert alert-success" *ngIf="finishedSR" role="alert">
+                                                        <strong>Done!</strong> ReviewAdded
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>

@@ -1,0 +1,85 @@
+<h1 class="my-4">{{currentHotel}}</h1>
+<!-- filter the hotels here -->
+<div class="alert alert-info"><strong>Filter: </strong>
+    <form class="form-inline">
+        <div class="form-group">
+        <label for="maxP">Max Price: </label>
+        <input type="number" [(ngModel)] = 'maxPrice' [ngModelOptions]="{standalone: true}" class="form-control" id="maxP">
+        </div>
+        <div class="form-group selector">
+            <label for="exampleSelect1"> Min Capacity: </label>
+            <select class="form-control" [(ngModel)] = 'minCapacity' [ngModelOptions]="{standalone: true}" id="exampleSelect1">
+            <option>1</option>
+            <option>2</option>
+            <option>3</option>
+            <option>4</option>
+            <option>5</option>
+            <option>6</option>
+            <option>7</option>
+            </select>
+        </div>
+        <button type="submit" (click)=setFilter() class="btn btn-default">Submit</button>
+        <button type="button" (click)=resetFilter() class="btn btn-info">Reset</button>
+    </form>
+</div>
+<div class="alert alert-warning"><strong>In Date: </strong><input type="date" [(ngModel)] = "inDate"> <strong>Out Date: </strong> <input type="date" [(ngModel)] = "outDate" ></div>
+<!-- <div class="alert alert-warning"><strong>Date Range Start: </strong><input type="date" [(ngModel)] = "inDate"> <strong>Date Range End: </strong> <input type="date" [(ngModel)] = "outDate" ></div> code for statistics range--> 
+<!-- Add breakfasts or services here -->
+<div class="alert alert-warning">
+    <strong>Included Breakfast: </strong> 
+        <select name="BreakfastOption" [(ngModel)] = "chosenBreakfast" id="">
+            <option *ngFor = "let breakfast of breakfasts" [ngValue] = "breakfast">{{breakfast.b_type}} | ${{breakfast.b_Cost}} | {{breakfast.description}}</option>
+            <option [ngValue] = "noneBreakfast">None</option>
+        </select>
+    <strong>| Included Service: </strong>
+    <select name="ServiceOption" [(ngModel)]="chosenService"  id="">
+            <option *ngFor = "let service of services" [ngValue] = "service">{{service.s_type}} | ${{service.s_Cost}}</option>
+            <option [ngValue]="noneService">none</option>
+    </select>
+</div>
+<app-success *ngIf="finishedReservation"></app-success>
+<div class="card card-inverse card-primary mb-3" *ngIf = 'finalization'>
+    <div class="card-block">
+        <blockquote class="card-blockquote">
+        <strong><h2>Finalize Reservation Info</h2> Invoice No. {{transactionInvoiceNo}}</strong>
+        <p><strong>Stay at the {{selectedRoom.hotel_id}}</strong> for {{numDays}} days at ${{selectedRoom.price}}/Night</p>
+        <p> Reservation dates: <strong>{{inDate}}</strong> to <strong>{{outDate}}</strong></p>
+        <p><strong>Breakfast Option: </strong>{{chosenBreakfast.b_type}} | ${{chosenBreakfast.b_Cost}} </p>
+        <p><strong>Service Option: </strong>{{chosenService.s_type}} | ${{chosenService.s_Cost}} </p>
+        <p> <strong><h3>Total Cost: ${{totalCost}}</h3></strong></p>
+        <span><p>Select Card Payment Option or</p><button class="btn btn-primary" (click)='toggleAddCard()' >Add Card</button>
+            <app-addcard *ngIf="addCard"></app-addcard>
+        </span>
+        <select name="CardOption" [(ngModel)] = "chosenCreditCard" id="">
+                <option *ngFor = "let card of creditCards" [ngValue] = "card">{{card.cardholder_name}} | {{card.card_type}} | Exp:{{card.exp_date}}</option>
+        </select>
+        <span><button type="submit" [disabled] = "this.chosenCreditCard.cid === 'invalid'" (click) = "submitPayment()" class="btn btn-success">Confirm</button>
+        
+        <button type="submit" class="btn btn-secondary" (click) = 'cancelFinalization()'>Cancel</button></span>
+        </blockquote>
+    </div>
+</div>
+
+<hr>
+<!-- This row contains the hotel information -->
+<div class="row" style="overflow-y: scroll; height:550px;">
+    <div class="col-sm-4" *ngFor="let room of rooms">
+        <div class="card hotel-card" >
+            <div class="card-block">
+                <h3 class="card-title">${{room.price}}</h3>
+                <h6 class="card-subtitle mb-2 text-muted">
+                    Type: {{room.room_type}} | Capacity: {{room.capacity}}
+                    Room: {{room.room_no}} Floor: {{room.floor_no}}
+                    Hotel: {{room.hotel_id}}
+                    </h6>
+                <p class="card-text">Description: {{room.description}}</p>
+                <img class = "room-image"src="http://www.marinabaysands.com/content/dam/singapore/marinabaysands/master/main/home/hotel/deluxe1500x930.jpg" alt="">
+                <button type="button" (click) = "checkSignInStatusAndReserve(room)" class="btn btn-info">Reserve Room</button>
+            </div>
+        </div>
+    </div>
+</div>
+    
+
+
+

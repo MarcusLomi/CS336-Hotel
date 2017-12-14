@@ -2,6 +2,15 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.5.0.
 
+##Installation Guidelines
+You can install [WebStorm](https://www.jetbrains.com/) though you may need a student license for this. Or you can install [Visual Studio Code](https://code.visualstudio.com/download)
+You will need [Node and NPM](https://nodejs.org/en/)
+
+## Running the project
+Open up the folder for the repository in VSCode or Webstorm. 
+If on VSCode bring up the terminal and type 'npm install'
+After that type 'npm start' 
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
